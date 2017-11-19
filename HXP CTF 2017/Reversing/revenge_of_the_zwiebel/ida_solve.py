@@ -62,3 +62,4 @@ except:
             c |= bit
         sweet_flag += chr(c)
     print "FLAG IS : " + sweet_flag
+    # FLAG IS : hxp{1_5m3ll_l4zyn355}
