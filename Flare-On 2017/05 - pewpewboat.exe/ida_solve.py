@@ -1,7 +1,7 @@
 #Souhail Hammou - 2018
 #############################################
-# Steps :
-# =====
+# How does it work ?
+# ====================
 # 1 + Get the decrypted data from RAX
 #			0000000000403EA9                 mov     [rbp+decrypted_data], rax
 #
@@ -11,22 +11,43 @@
 # 			0000000000403801                 call    _printf
 # 			0000000000403806                 mov     rdx, cs:stdin   ; stream
 # 			000000000040380D                 lea     rax, [rbp+Letter]
-# 			0000000000403811                 mov     esi, 11h        		<< Breakpoint here to get the ptr in RAX (lazy to calculate it :P)
+# 			0000000000403811                 mov     esi, 11h        	<< Breakpoint here to get the ptr in RAX (lazy to calculate it :P)
 # 			0000000000403816                 mov     rdi, rax        ; s
 # 			0000000000403819                 call    _fgets
-# 			000000000040381E 				 test    rax, rax
-# 			0000000000403821 				 jz      loc_4038BF
-# 			0000000000403827 				 movzx   eax, [rbp+Letter] 
+# 			000000000040381E 		 test    rax, rax
+# 			0000000000403821 		 jz      loc_4038BF
+# 			0000000000403827 		 movzx   eax, [rbp+Letter] 
 #			0000000000403811                 mov     esi, 11h        ; n 	<< Skip to here and set the coordinates
 # 4 - Continue Step 3 until the board is complete
 # 
 # 5 + Continue execution until the code below, where we need to skip a captcha like function that does not affect the outcome of the program in any way.
-# 			0000000000403BD9 				mov     rax, [rbp+decrypted_data] 	<< breakpoint here
-# 			0000000000403BDD 				mov     rdi, rax
-# 			0000000000403BE0 				call    NoppedFunction
-# 			0000000000403BE5 				mov     [rbp+var_50], 1 			<< Skip to here
+# 			0000000000403BD9 		 mov     rax, [rbp+decrypted_data]  << breakpoint here
+# 			0000000000403BDD 		 mov     rdi, rax
+# 			0000000000403BE0 		 call    NoppedFunction
+# 			0000000000403BE5 		 mov     [rbp+var_50], 1 	    << Skip to here
 #
 # 6 + Repeat
+#
+# How to solve ?
+# ==============
+# + The following letters are printed in the "Output View" when running the IDAPython script:
+#	FHGUZREJVO
+#
+# + And the following is printed on the shell :
+#	Aye!PEWYouPEWfoundPEWsomePEWlettersPEWdidPEWya?PEWToPEWfindPEWwhatPEWyou'rePEWlookingPEWfor,PEWyou'llPEWwantPEWtoPEWre-orderPEWthem:PEW9,PEW1,PEW2,PEW7,PEW3,PEW5,PEW6,PEW5,PEW8,PEW0,PEW2,PEW3,PEW5,PEW6,PEW1,PEW4.PEWNextPEWyouPEWletPEW13PEWROTPEWinPEWthePEWsea!PEWTHEPEWFINALPEWSECRETPEWCANPEWBEPEWFOUNDPEWWITHPEWONLYPEWTHEPEWUPPERPEWCASE.
+#	Thanks for playing!
+#
+# + We remove "PEW" from the string to get :
+#	Aye! You found some letters did ya? To find what you're looking for, you'll want to re-order them: 9, 1, 2, 7, 3, 5, 6, 5, 8, 0, 2, 3, 5, 6, 1, 4. Next you let 13 ROT in the sea! THE FINAL SECRET CAN BE FOUND WITH ONLY THE UPPER CASE.
+#	Thanks for playing!
+#
+# + When we re-order the characters we find the string :
+#  	BUTWHEREISTHERUM
+#
+# + Finally, we enter this string as the coordinates and we get the flag :)
+#	Enter a coordinate: BUTWHEREISTHERUM
+# 	very nicely done!  here have this key:  y0u__sUnK_mY__P3Wp3w_b04t@flare-on.com
+#
 ##############################################
 from idc import *
 
