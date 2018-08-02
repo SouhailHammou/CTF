@@ -41,7 +41,7 @@ uint8_t execute_instruction(int32_t* code, int32_t src_index, int32_t dest_index
 
 #ifndef EXECUTE_CODE
     /*
-    If the result of "sub [3737], [3736]" is 0, this means that two characters are correct.
+    If the result of "sub [3737], [3736]" is 0, this means that the two characters are correct.
     */
     if ( dest_index == 3737 && src_index == 3736 && code[dest_index] == 0 )
     {
